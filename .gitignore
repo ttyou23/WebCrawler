@@ -1,0 +1,6 @@
+.pydevproject
+.settings
+.project
+.idea
+logs/
+static/
