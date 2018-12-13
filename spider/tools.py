@@ -8,18 +8,24 @@
 
 import os
 import sys
-reload(sys)
-sys.setdefaultencoding("utf8")
-
 import re
 from bs4 import BeautifulSoup
 import requests
 import xlwt as xlwt
 
+reload(sys)
+sys.setdefaultencoding("utf8")
 
-def write_error(book_error, filepath=u"d://error.txt"):
+
+def write_file(data, filepath=u"d://file.txt"):
     with open(filepath, 'a+') as f:
-        f.write(book_error)
+        f.write(data)
+
+
+def write_error(error, filepath=u"d://error.txt"):
+    with open(filepath, 'a+') as f:
+        f.write(error)
+
 
 def save2excel(houses, filepath):
     """
@@ -35,6 +41,7 @@ def save2excel(houses, filepath):
             booksheet.write(i, j, col)
     workbook.save(filepath)
     print os.getcwd()
+
 
 def get_html_content(ori_url, tag, key, flag):
     """

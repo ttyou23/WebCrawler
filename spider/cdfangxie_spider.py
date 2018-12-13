@@ -7,10 +7,7 @@
 # @Software: PyCharm
 import os
 import sys
-import re
-from bs4 import BeautifulSoup
-import requests
-import xlwt as xlwt
+import tools
 reload(sys)
 sys.setdefaultencoding("utf8")
 
@@ -21,82 +18,11 @@ OUTERROR_FILE = "D:\\book\\cdfangxie_error.txt"
 
 HOUSE_TITLE = [u'区域', u'项目名称', u'项目咨询电话', u'预/现售证号', u'房屋用途', u'预售面积(平方米)', u'上市时间', u'购房登记规则下载地址', u'成品住房装修方案价格表下载地址', u'项目网址']
 
-def write_error(book_error):
-    with open(OUTERROR_FILE, 'a+') as f:
-        f.write(book_error)
-
-def save2memory(houses, file):
-    """
-    保存内容到xls里面
-    :param houses: 房子预售信息
-    :param file: 保存文件路径
-    :return:
-    """
-    workbook = xlwt.Workbook(encoding='utf-8')
-    booksheet = workbook.add_sheet('info', cell_overwrite_ok=True)
-    for i, row in enumerate(houses):
-        for j, col in enumerate(row):
-            booksheet.write(i, j, col)
-    workbook.save(file)
-    print os.getcwd()
-
-def get_html_data(ori_url, tag, key, flag):
-    """
-    获取网页标签中的内容
-    :param ori_url:网址
-    :param tag:标签
-    :param key:
-    :param flag:
-    :return: 标签内容列表
-    """
-    try:
-        # 获取网页内容
-        s = requests.session()
-        s.keep_alive = False
-        response = requests.get(ori_url, headers={'Connection':'close'})
-        response.encoding = 'utf-8'
-        data = response.text
-        response.close();
-
-        # 利用正则查找所有连接
-        res_set = BeautifulSoup(data, "html.parser").find_all(tag, attrs={key: flag})
-        return res_set
-    except Exception, err:
-        print 2, err
-        write_error(ori_url + "\0" + str(err) + "\n")
-    else:
-        print "get_html_url: " + ori_url + "   -->ok"
-    return ""
-
-
-def get_html_url(ori_url, tag, key, flag, index=0):
-    link_list=[]
-    try:
-        # 获取网页内容
-        s = requests.session()
-        s.keep_alive = False
-        response = requests.get(ori_url, headers={'Connection':'close'})
-        response.encoding = 'utf-8'
-        data = response.text
-        response.close();
-
-        # 利用正则查找所有连接
-        res_set = BeautifulSoup(data, "html.parser").find_all(tag, attrs={key: flag})
-        if res_set and len(res_set)>0:
-            content = res_set[index]
-        else: content = res_set
-        link_list = re.findall(r"(?<=href=\").+?(?=\")|(?<=href=\').+?(?=\')", str(content))
-    except Exception, err:
-        print 2, err
-        write_error(ori_url + "\0" + str(err) + "\n")
-    else:
-        print "get_html_url: " + ori_url + "   -->ok"
-    return link_list
 
 def get_fangxie_info(url_json):
     print url_json
 
-    content = get_html_data(url_json["ori_url"], "div", "class", "infor")
+    content = tools.get_html_content(url_json["ori_url"], "div", "class", "infor")
     if content and len(content)>0:
         p_list = content[0].find_all("p")
         if p_list and len(p_list)>0:
@@ -146,7 +72,7 @@ def get_fangxie_info(url_json):
 def get_fangxie_list(ori_url):
     house_list = []
     print "get_fangxie_list: %s"%ori_url
-    content = get_html_data(ori_url, "div", "class", "right_cont")
+    content = tools.get_html_content(ori_url, "div", "class", "right_cont")
     if content:
         #获取房产信息列表
         ul_list = content[0].ul.contents
@@ -174,14 +100,13 @@ def get_fangxie_list(ori_url):
 
 
 def get_fangxie_tab(ori_url):
-    url_list = get_html_url(ori_url, "div", "class", "cont1_rukou", index=0)
+    url_list = tools.get_html_url(ori_url, "div", "class", "cont1_rukou", index=0)
     if url_list and len(url_list)>0:
         print "%s%s"%(CDFANGXIE, url_list[0])
-        total_houses = []
-        total_houses.append(HOUSE_TITLE)
+        total_houses = [HOUSE_TITLE]
         houses = get_fangxie_list("%s%s"%(CDFANGXIE, url_list[0]))
         total_houses.extend(houses)
-        save2memory(total_houses, OUTPUT_FILE)
+        tools.save2excel(total_houses, OUTPUT_FILE)
 
 
 if __name__=='__main__':
