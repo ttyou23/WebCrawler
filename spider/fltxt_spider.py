@@ -9,9 +9,8 @@
 import re
 from bs4 import BeautifulSoup
 import requests
-import sys;
-
-reload(sys);
+import sys
+reload(sys)
 sys.setdefaultencoding("utf8")
 
 FLTXT_HOME = "http://www.fltxt.com"

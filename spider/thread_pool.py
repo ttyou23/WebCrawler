@@ -7,11 +7,11 @@
 # @Software: PyCharm
 
 # 创建队列实例， 用于存储任务
+import sys
 import threading
 import time
 from Queue import Queue
 from threading import Thread
-import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
 

@@ -6,14 +6,13 @@
 # @File    : cdfangxie_spider.py
 # @Software: PyCharm
 import os
-import sys;
-reload(sys);
-sys.setdefaultencoding("utf8")
-
+import sys
 import re
 from bs4 import BeautifulSoup
 import requests
 import xlwt as xlwt
+reload(sys)
+sys.setdefaultencoding("utf8")
 
 
 CDFANGXIE = "http://www.cdfangxie.com"
@@ -29,8 +28,8 @@ def write_error(book_error):
 def save2memory(houses, file):
     """
     保存内容到xls里面
-    :param en_cn_map:  英文中文对应字典 {"name": "名字"}, OrderedDict
-    :param content:
+    :param houses: 房子预售信息
+    :param file: 保存文件路径
     :return:
     """
     workbook = xlwt.Workbook(encoding='utf-8')
@@ -42,6 +41,14 @@ def save2memory(houses, file):
     print os.getcwd()
 
 def get_html_data(ori_url, tag, key, flag):
+    """
+    获取网页标签中的内容
+    :param ori_url:网址
+    :param tag:标签
+    :param key:
+    :param flag:
+    :return: 标签内容列表
+    """
     try:
         # 获取网页内容
         s = requests.session()
@@ -153,17 +160,16 @@ def get_fangxie_list(ori_url):
                 house = get_fangxie_info(url_json)
                 if house and len(house)>0:
                     house_list.append(house)
-                    break
         #获取下一页链接
         page_list = content[0].div.b
         if page_list:
             for item in page_list:
                 if type(item) == type(content[0]) and item.text == u"下一页":
                     pass
-                    # next_house_list = get_fangxie_list("%s%s"%(CDFANGXIE, item["href"]))
-                    # if next_house_list and len(next_house_list) > 0:
-                    #     house_list.extend(next_house_list)
-                    #     break
+                    next_house_list = get_fangxie_list("%s%s"%(CDFANGXIE, item["href"]))
+                    if next_house_list and len(next_house_list) > 0:
+                        house_list.extend(next_house_list)
+                        break
     return house_list
 
 
