@@ -1,7 +1,4 @@
 # coding:utf-8
-import re
-from bs4 import BeautifulSoup
-import requests
 import sys
 import tools
 
@@ -14,13 +11,12 @@ ZXCS8_POST = "http://www.zxcs.me/post"
 ZXCS8_DOWNLOAD = "http://www.zxcs.me/download.php"
 
 ZXCS8_RECORD_UP = "http://www.zxcs.me/record/201902"
-ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201808"
+ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201810"
 
 post_find_url_list = []
 record_find_url_list = []
 
-OUTFILE = "D:\\book\\zxcs8 20181107.txt"
-
+OUTFILE = "D:\\book\\zxcs8 20181213.txt"
 
 
 def get_zxcs8_rar_book(ori_url):
