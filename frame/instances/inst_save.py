@@ -5,3 +5,16 @@
 # @Site    : 保存数据
 # @File    : inst_save.py
 # @Software: PyCharm
+
+
+class Saver(object):
+    """
+    class of Fetcher, must include function working()
+    """
+
+    def __init__(self):
+        return
+
+    def working(self, param):
+        print "Saver===="
+        return True
