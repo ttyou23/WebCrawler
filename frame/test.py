@@ -5,8 +5,8 @@
 # @File    : test.py
 # @Software: PyCharm
 
-from dispatcher import *
-from instances import *
+from .dispatcher import *
+from .instances import *
 from tools import  *
 
 
@@ -32,11 +32,6 @@ class MyParser(Parser):
 
     def htm_subject_parse(self, url, content):
         return
-
-
-def test_end(b):
-    print "end======%s"%b
-    return
 
 
 if __name__ == '__main__':

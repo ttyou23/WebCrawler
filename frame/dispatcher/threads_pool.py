@@ -7,8 +7,8 @@
 import threading
 from Queue import Queue
 
-from thread_inst import *
-from instances import *
+from .thread_inst import *
+from ..instances import *
 
 
 class ThreadPool(object):
