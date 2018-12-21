@@ -91,13 +91,23 @@ class ThreadPool(object):
     def get_thread_stop_flag(self):
         return self._thread_stop_flag
 
-    def is_all_task_done(self):
-        return
 
     def get_fetcher_number(self):
         return self._fetcher_number
 
 
+    def get_number_dict(self, key=None):
+        return self._number_dict[key] if key else self._number_dict
+
+    def update_number_dict(self, key, value):
+        self._lock.acquire()
+        self._number_dict[key] += value
+        self._lock.release()
+        return
+
+    def is_all_tasks_done(self):
+        return False if self._number_dict[TPEnum.TASKS_RUNNING] or self._number_dict[TPEnum.URL_FETCH_NOT] or \
+                        self._number_dict[TPEnum.HTM_PARSE_NOT] or self._number_dict[TPEnum.ITEM_SAVE_NOT] else True
     ## ===================================================================================================================
 
     def add_a_task(self, task_name, task):

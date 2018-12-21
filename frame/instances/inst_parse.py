@@ -25,17 +25,19 @@ class Parser(object):
         self._max_deep = max_deep
         return
 
-    def working(self, url, keys, deep, content):
-
+    def parsing(self, url, content, func_callback=None):
 
         try:
-            parse_state, url_list, save_list = self.htm_parse( url, keys, deep, content)
+            if not func_callback:
+                parse_state, url_list, save_list = self.htm_parse(url, content)
+            else:
+                parse_state, url_list, save_list = func_callback(url, content)
         except Exception as excep:
             parse_state, url_list, save_list = -1, [], []
 
         return parse_state, url_list, save_list
 
-    def htm_parse(self, url, keys, content):
+    def htm_parse(self, url, content):
 
         status_code, url_now, html_text = content
 
@@ -45,6 +47,6 @@ class Parser(object):
         #
         # title = re.search(r"<title>(?P<title>.+?)</title>", html_text, flags=re.IGNORECASE)
         # save_list = [(url, title.group("title").strip(), datetime.datetime.now()), ] if title else []
-        url_list = None
-        save_list = None
+        url_list = []
+        save_list = []
         return 1, url_list, save_list

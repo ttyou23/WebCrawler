@@ -20,22 +20,20 @@ class Saver(object):
         self._save_pipe = save_pipe
         return
 
-    def working(self, url, keys, item):
-
-        logging.debug("%s start: keys=%s, url=%s", self.__class__.__name__, keys, url)
+    def saving(self, url, item):
 
         try:
-            save_state = self.item_save(url, keys, item)
+            save_state = self.item_save(url, item)
         except Exception as excep:
             save_state = -1
 
         logging.debug("%s end: save_state=%s, url=%s", self.__class__.__name__, save_state, url)
         return save_state
 
-    def item_save(self, url, keys, item):
+    def item_save(self, url, item):
         """
         save the item of a url, you can rewrite this function, parameters and returns refer to self.working()
         """
-        self._save_pipe.write("\t".join([str(col) for col in item]) + "\n")
-        self._save_pipe.flush()
+        with open("d://file.txt", 'a+') as f:
+            f.write("\t".join([str(col) for col in item]) + "\n")
         return 1

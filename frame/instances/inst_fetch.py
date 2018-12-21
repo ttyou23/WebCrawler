@@ -28,11 +28,11 @@ class Fetcher(object):
         self._sleep_time = sleep_time
         return
 
-    def working(self, url, keys, repeat):
+    def fetching(self, url, repeat):
 
         time.sleep(random.randint(0, self._sleep_time))
         try:
-            fetch_state, fetch_result = self.url_fetch(url, keys)
+            fetch_state, fetch_result = self.url_fetch(url)
         except Exception as excep:
             if repeat >= self._max_repeat:
                 fetch_state, fetch_result = -1, None
@@ -42,11 +42,7 @@ class Fetcher(object):
         logging.debug("%s end: fetch_state=%s, url=%s", self.__class__.__name__, fetch_state, url)
         return fetch_state, fetch_result
 
-    def url_fetch(self, url, keys):
-        """
-        fetch the content of a url, you can rewrite this function, parameters and returns refer to self.working()
-        """
-        response = requests.get(url, params=None, headers={}, data=None, timeout=(3.05, 10))
-
+    def url_fetch(self, url):
+        response = requests.get(url, params=None,  headers={'Connection':'close'}, data=None, timeout=(3.05, 10))
         result = (response.status_code, response.url, response.text)
         return 1, result

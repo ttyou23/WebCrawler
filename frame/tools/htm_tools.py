@@ -27,16 +27,16 @@ def write_error(error, filepath=u"d://error.txt"):
         f.write(error)
 
 
-def save2excel(houses, filepath):
+def save2excel(save_data, filepath):
     """
     保存内容到xls里面
-    :param houses: 房子预售信息
+    :param save_data: 待保存数据
     :param filepath: 保存文件路径
     :return:
     """
     workbook = xlwt.Workbook(encoding='utf-8')
     booksheet = workbook.add_sheet('info', cell_overwrite_ok=True)
-    for i, row in enumerate(houses):
+    for i, row in enumerate(save_data):
         for j, col in enumerate(row):
             booksheet.write(i, j, col)
     workbook.save(filepath)

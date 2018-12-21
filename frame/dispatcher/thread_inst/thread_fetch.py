@@ -7,6 +7,7 @@
 
 from thread_base import BaseThread, TPEnum
 
+
 class FetchThread(BaseThread):
     """
     class of BaseThread, as base class of each thread
@@ -23,6 +24,15 @@ class FetchThread(BaseThread):
         """
         procedure of each thread, return True to continue, False to stop
         """
-        task = self._pool.get_a_task(TPEnum.URL_FETCH)
-        self._worker.working()
-        return
+        url, func_callback, repeat = self._pool.get_a_task(TPEnum.URL_FETCH)
+
+        state, result = self._worker.fetching(url, repeat)
+
+        if state > 0:
+            self._pool.add_a_task(TPEnum.HTM_PARSE, (url, func_callback, result))
+            self._pool.update_number_dict(TPEnum.URL_FETCH_SUCC, +1)
+        elif state == 0:
+            self._pool.add_a_task(TPEnum.URL_FETCH, (func_callback, url, repeat + 1))
+        else:
+            self._pool.update_number_dict(TPEnum.URL_FETCH_FAIL, +1)
+        return True

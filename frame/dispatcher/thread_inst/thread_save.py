@@ -7,6 +7,7 @@
 
 from thread_base import BaseThread, TPEnum
 
+
 class SaveThread(BaseThread):
     """
     class of BaseThread, as base class of each thread
@@ -23,5 +24,6 @@ class SaveThread(BaseThread):
         """
         procedure of each thread, return True to continue, False to stop
         """
-        self._worker.working()
-        return
+        url, save_list = self._pool.get_a_task(TPEnum.ITEM_SAVE)
+        self._worker.saving(url, save_list)
+        return True
