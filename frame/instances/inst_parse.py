@@ -7,14 +7,44 @@
 # @Software: PyCharm
 
 
+import re
+import logging
+import datetime
+
+
 class Parser(object):
     """
-    class of Fetcher, must include function working()
+    class of Parser, must include function working()
     """
 
-    def __init__(self):
+    def __init__(self, max_deep=0):
+        """
+        constructor
+        :param max_deep: default 0, if -1, spider will not stop until all urls are fetched
+        """
+        self._max_deep = max_deep
         return
 
-    def working(self, param):
-        print "Parser===="
-        return True
+    def working(self, url, keys, deep, content):
+
+
+        try:
+            parse_state, url_list, save_list = self.htm_parse( url, keys, deep, content)
+        except Exception as excep:
+            parse_state, url_list, save_list = -1, [], []
+
+        return parse_state, url_list, save_list
+
+    def htm_parse(self, url, keys, content):
+
+        status_code, url_now, html_text = content
+
+        # url_list = []
+        # if (self._max_deep < 0) or (deep < self._max_deep):
+        #     url_list = [(_url, keys, priority+1) for _url in re.findall(r"<a.+?href=\"(?P<url>.{5,}?)\".*?>", html_text, flags=re.IGNORECASE)]
+        #
+        # title = re.search(r"<title>(?P<title>.+?)</title>", html_text, flags=re.IGNORECASE)
+        # save_list = [(url, title.group("title").strip(), datetime.datetime.now()), ] if title else []
+        url_list = None
+        save_list = None
+        return 1, url_list, save_list
