@@ -13,7 +13,7 @@ from instances import *
 
 class ThreadPool(object):
 
-    def __int__(self, parse_inst, fetch_inst=None, save_inst=None):
+    def __init__(self, parse_inst, fetch_inst=None, save_inst=None):
 
         self._number_dict = {
             TPEnum.TASKS_RUNNING: 0,  # the count of tasks which are running
@@ -52,10 +52,12 @@ class ThreadPool(object):
 
     ## ===================================================================================================================
 
-    def start_working(self, fetcher_num):
+    def start_working(self, root_url, fetcher_num):
 
         self._fetcher_number = fetcher_num
         self._thread_stop_flag = False
+
+        self.add_a_task(TPEnum.URL_FETCH, (root_url, None, 0))
 
         self._fetch_thread_list = [FetchThread("FetchThread %d"%(i), self._fetch_inst, self) for i in xrange(fetcher_num)]
 
@@ -115,7 +117,7 @@ class ThreadPool(object):
         if task_name == TPEnum.URL_FETCH:
             self._fetch_queue.put_nowait(task)
             self.update_number_dict(TPEnum.URL_FETCH_NOT, +1)
-            self.update_number_dict(TPEnum.COUNTER, +1)
+            # self.update_number_dict(TPEnum.COUNTER, +1)
         elif task_name == TPEnum.HTM_PARSE:
             self._parse_queue.put_nowait(task)
             self.update_number_dict(TPEnum.HTM_PARSE_NOT, +1)

@@ -25,28 +25,21 @@ class Parser(object):
         self._max_deep = max_deep
         return
 
-    def parsing(self, url, content, func_callback=None):
+    def parsing(self, url, callback, content):
 
         try:
-            if not func_callback:
-                parse_state, url_list, save_list = self.htm_parse(url, content)
+            if not callback:
+                parse_state, url_list, save_list = self.root_parse(url, content)
             else:
-                parse_state, url_list, save_list = func_callback(url, content)
+                parse_state, url_list, save_list = callback(url, content)
         except Exception as excep:
             parse_state, url_list, save_list = -1, [], []
 
         return parse_state, url_list, save_list
 
-    def htm_parse(self, url, content):
+    def root_parse(self, root_url, content):
 
         status_code, url_now, html_text = content
-
-        # url_list = []
-        # if (self._max_deep < 0) or (deep < self._max_deep):
-        #     url_list = [(_url, keys, priority+1) for _url in re.findall(r"<a.+?href=\"(?P<url>.{5,}?)\".*?>", html_text, flags=re.IGNORECASE)]
-        #
-        # title = re.search(r"<title>(?P<title>.+?)</title>", html_text, flags=re.IGNORECASE)
-        # save_list = [(url, title.group("title").strip(), datetime.datetime.now()), ] if title else []
         url_list = []
         save_list = []
         return 1, url_list, save_list

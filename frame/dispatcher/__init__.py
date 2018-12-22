@@ -6,5 +6,5 @@
 # @File    : __init__.py.py
 # @Software: PyCharm
 
-from threads_pool import ThreadPool as WebSpider
-from thread_inst import *
+from .threads_pool import ThreadPool as WebSpider
+from .thread_inst import *

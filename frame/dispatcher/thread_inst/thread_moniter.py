@@ -12,13 +12,6 @@ class MoniterThread(BaseThread):
     class of BaseThread, as base class of each thread
     """
 
-    def __init__(self, name, worker, pool):
-        """
-        constructor
-        """
-        BaseThread.__init__(name, worker, pool)
-        return
-
     def working(self):
         """
         procedure of each thread, return True to continue, False to stop
