@@ -47,10 +47,18 @@ class MyParser(Parser):
         for item in res_list:
             book_name = item.find("h2").a.get("title")
             book_url = item.find("h2").a.get("href")
-            book_pub = item.find("div", class_="pub")
+            book_pub = item.find("div", class_="pub").get_text()
+            book_star = item.find("span", class_="rating_nums").get_text()
+            book_dict = item.find("span", class_="pl").get_text()
+            book_summary = item.find("p").get_text()
             print book_name
             print book_url
+            print book_pub
+            print book_star
+            print book_dict
+            print book_summary
             break
+
         url_list = []
         save_list = []
         return 1, url_list, save_list
