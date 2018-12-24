@@ -18,10 +18,8 @@ class FetchThread(BaseThread):
         procedure of each thread, return True to continue, False to stop
         """
         url, callback, repeat = self._pool.get_a_task(TPEnum.URL_FETCH)
-        print url, callback, repeat
 
         state, result = self._worker.fetching(url, repeat)
-        print state, result
 
         if state > 0:
             self._pool.add_a_task(TPEnum.HTM_PARSE, (url, callback, result))

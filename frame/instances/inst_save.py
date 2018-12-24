@@ -25,6 +25,7 @@ class Saver(object):
         try:
             save_state = self.item_save(url, item)
         except Exception as excep:
+            logging.error("%s error: excep=%s", self.__class__.__name__, excep)
             save_state = -1
 
         logging.debug("%s end: save_state=%s, url=%s", self.__class__.__name__, save_state, url)
@@ -34,6 +35,8 @@ class Saver(object):
         """
         save the item of a url, you can rewrite this function, parameters and returns refer to self.working()
         """
-        with open("d://file.txt", 'a+') as f:
-            f.write("\t".join([str(col) for col in item]) + "\n")
+        with open("d:\\file.txt", 'a+') as f:
+            for temp in item:
+                data = "".join(str(col) for col in temp)
+                f.write(data.encode('gbk'))
         return 1
