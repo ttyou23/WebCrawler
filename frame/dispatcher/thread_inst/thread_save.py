@@ -21,7 +21,7 @@ class SaveThread(BaseThread):
         url, save_list = self._pool.get_a_task(TPEnum.ITEM_SAVE)
         state = self._worker.saving(url, save_list)
         logging.debug("%s  state=%d  url=%s", self.__class__.__name__, state,  url)
-        if state > 1:
+        if state > 0:
             self._pool.update_number_dict(TPEnum.ITEM_SAVE_SUCC, +1)
         else:
             self._pool.update_number_dict(TPEnum.ITEM_SAVE_FAIL, +1)

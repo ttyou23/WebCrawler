@@ -44,5 +44,6 @@ class Fetcher(object):
 
     def url_fetch(self, url):
         response = requests.get(url, params=None,  headers={'Connection':'close'}, data=None, timeout=(3.05, 10))
+        response.encoding = "utf-8"
         result = (response.status_code, response.url, response.text)
         return 1, result
