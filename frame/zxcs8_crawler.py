@@ -63,11 +63,26 @@ class MyParser(Parser):
         return 1, url_list, save_list
 
 def get_proxy():
-    return requests.get("http://127.0.0.1:5010/get/").content
+    return requests.get("http://123.207.35.36:5010/get/").content
 
 def delete_proxy(proxy):
     requests.get("http://127.0.0.1:5010/delete/?proxy={}".format(proxy))
 
+    # def freeProxyTwelve(page_count=2):
+    #     """
+    #     guobanjia http://ip.jiangxianli.com/?page=
+    #     免费代理库
+    #     超多量
+    #     :return:
+    #     """
+    #     for i in range(1, page_count + 1):
+    #         url = 'http://ip.jiangxianli.com/?page={}'.format(i)
+    #         html_tree = getHtmlTree(url)
+    #         tr_list = html_tree.xpath("/html/body/div[1]/div/div[1]/div[2]/table/tbody/tr")
+    #         if len(tr_list) == 0:
+    #             continue
+    #         for tr in tr_list:
+    #             yield tr.xpath("./td[2]/text()")[0] + ":" + tr.xpath("./td[3]/text()")[0]
 
 if __name__ == '__main__':
     print "====================================开始=========================================="
@@ -79,7 +94,8 @@ if __name__ == '__main__':
     # spider = WebSpider(parse_inst=parser, save_inst=saver, fetch_inst=None)
     # spider.start_working(root_url="http://www.zxcs.me/map.html", fetcher_num=1)
     # spider.wait_for_finish()
-    response = requests.get("http://www.zxcs.me/map.html", proxies={"http": "http://113.78.255.254:9000",})
+    response = requests.get("http://ip.jiangxianli.com/?page=1")
     print response.text
+    # print get_proxy()
     print "====================================结束=========================================="
     exit()
