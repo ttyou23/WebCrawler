@@ -3,6 +3,7 @@
 import logging
 import re
 
+import requests
 import xlwt
 from bs4 import BeautifulSoup
 from dispatcher import *
@@ -61,17 +62,24 @@ class MyParser(Parser):
         save_list = []
         return 1, url_list, save_list
 
+def get_proxy():
+    return requests.get("http://127.0.0.1:5010/get/").content
+
+def delete_proxy(proxy):
+    requests.get("http://127.0.0.1:5010/delete/?proxy={}".format(proxy))
+
 
 if __name__ == '__main__':
     print "====================================开始=========================================="
-    logger = logging.getLogger()  # initialize logging class
-    logger.setLevel(logging.DEBUG)  # default log level
-
-    parser = MyParser()
-    saver = MySaver()
-    spider = WebSpider(parse_inst=parser, save_inst=saver, fetch_inst=None)
-    spider.start_working(root_url="http://www.zxcs.me/map.html", fetcher_num=1)
-    spider.wait_for_finish()
-
+    # logger = logging.getLogger()  # initialize logging class
+    # logger.setLevel(logging.DEBUG)  # default log level
+    #
+    # parser = MyParser()
+    # saver = MySaver()
+    # spider = WebSpider(parse_inst=parser, save_inst=saver, fetch_inst=None)
+    # spider.start_working(root_url="http://www.zxcs.me/map.html", fetcher_num=1)
+    # spider.wait_for_finish()
+    response = requests.get("http://www.zxcs.me/map.html", proxies={"http": "http://113.78.255.254:9000",})
+    print response.text
     print "====================================结束=========================================="
     exit()

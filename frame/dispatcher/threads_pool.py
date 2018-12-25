@@ -9,7 +9,7 @@ from Queue import Queue
 
 from .thread_inst import *
 from instances import *
-
+from tools import *
 
 class ThreadPool(object):
 
@@ -35,6 +35,7 @@ class ThreadPool(object):
             TPEnum.PROXIES_FAIL: 0,  # the count of proxies which banned by website
         }
         self._lock = threading.Lock()  # the lock which self._number_dict needs
+        self._url_filter = UrlFilter()
 
         self._fetch_queue = Queue()
         self._parse_queue = Queue()
@@ -124,7 +125,7 @@ class ThreadPool(object):
 
     def add_a_task(self, task_name, task):
 
-        if task_name == TPEnum.URL_FETCH:
+        if task_name == TPEnum.URL_FETCH and ((not self._url_filter) or self._url_filter.check_and_add(task[0])):
             self._fetch_queue.put_nowait(task)
             self.update_number_dict(TPEnum.URL_FETCH_NOT, +1)
             # self.update_number_dict(TPEnum.COUNTER, +1)
