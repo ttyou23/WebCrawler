@@ -95,7 +95,13 @@ if __name__ == '__main__':
     # spider.start_working(root_url="http://www.zxcs.me/map.html", fetcher_num=1)
     # spider.wait_for_finish()
     response = requests.get("http://ip.jiangxianli.com/?page=1")
-    print response.text
+    response.encoding = "utf-8"
+    body = BeautifulSoup(response.text, "html.parser").find_all("button", text=re.compile(r"^20"))
+    proxy_list = body.find
+    for proxy in proxy_list:
+        # if type(proxy) = bs4.
+        print proxy
+    # print response.text
     # print get_proxy()
     print "====================================结束=========================================="
     exit()

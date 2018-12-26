@@ -28,4 +28,10 @@ class FetchThread(BaseThread):
             self._pool.add_a_task(TPEnum.URL_FETCH, (callback, url, repeat + 1))
         else:
             self._pool.update_number_dict(TPEnum.URL_FETCH_FAIL, +1)
+
+        # ----*----
+        while (self._pool.get_number_dict(TPEnum.HTM_PARSE_NOT) >= self._max_count) or (self._pool.get_number_dict(TPEnum.ITEM_SAVE_NOT) >= self._max_count):
+            logging.debug("%s[%s] sleep 5 seconds because of too many 'HTM_PARSE_NOT' or 'ITEM_SAVE_NOT'", self.__class__.__name__, self.getName())
+            time.sleep(5)
+
         return True

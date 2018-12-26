@@ -11,9 +11,10 @@ from .thread_inst import *
 from instances import *
 from tools import *
 
+
 class ThreadPool(object):
 
-    def __init__(self, parse_inst, save_inst=None, fetch_inst=None):
+    def __init__(self, parse_inst, save_inst=None, proxieser=None, fetch_inst=None, max_count_parsave=100, max_count_proxies=100):
 
         self._number_dict = {
             TPEnum.TASKS_RUNNING: 0,  # the count of tasks which are running
@@ -35,20 +36,27 @@ class ThreadPool(object):
             TPEnum.PROXIES_FAIL: 0,  # the count of proxies which banned by website
         }
         self._lock = threading.Lock()  # the lock which self._number_dict needs
-        self._url_filter = UrlFilter()
+        self._url_filter = UrlFilter() #URL
+        # self._thread_stop_flag = False  # default: False, stop flag of threads
+        # self._fetcher_number = 0  # default: 0, fetcher number in thread pool
+        self._max_count_parsave = max_count_parsave         # maximum count of items which in parse queue or save queue
+        self._max_count_proxies = max_count_proxies         # maximum count of items which in proxies queue
 
         self._fetch_queue = Queue()
         self._parse_queue = Queue()
         self._save_queue = Queue()
+        self._queue_proxies = Queue()  # {"http": "http://auth@ip:port", "https": "https://auth@ip:port"}
 
-        self._fetch_inst = fetch_inst if fetch_inst else Fetcher()
-        self._parse_inst = parse_inst
-        self._save_inst = save_inst if save_inst else Saver()
+        self._inst_fetcher = fetch_inst if fetch_inst else Fetcher()
+        self._inst_parser = parse_inst
+        self._inst_saver = save_inst if save_inst else Saver()
+        self._inst_proxieser = proxieser
 
         self._fetch_thread_list = []
-        self._parse_thread = ParseThread("ParseThread", self._parse_inst, self)
-        self._save_thread = SaveThread("SaveThread", self._save_inst, self)
+        self._parse_thread = ParseThread("ParseThread", self._inst_parser, self)
+        self._save_thread = SaveThread("SaveThread", self._inst_saver, self)
         self._moniter_thread = MoniterThread("MoniterThread", self)
+        self._thread_proxieser = None  # proxieser thread, be None if not proxieser
 
         return
 
@@ -65,7 +73,7 @@ class ThreadPool(object):
             self._moniter_thread.setDaemon(True)
             self._moniter_thread.start()
 
-        self._fetch_thread_list = [FetchThread("FetchThread %d" % (i), self._fetch_inst, self) for i in
+        self._fetch_thread_list = [FetchThread("FetchThread %d" % (i), self._inst_fetcher, self) for i in
                                    xrange(fetcher_num)]
 
         for thread in self._fetch_thread_list:
@@ -97,6 +105,7 @@ class ThreadPool(object):
 
         # if self._moniter_thread and self._moniter_thread.is_alive():
         #     self._moniter_thread.join()
+        print "wait_for_finish end=========="
 
         return
 
@@ -149,7 +158,7 @@ class ThreadPool(object):
             self.update_number_dict(TPEnum.HTM_PARSE_NOT, -1)
             return task
         elif task_name == TPEnum.ITEM_SAVE:
-            task = self._save_queue.get(block=True, timeout=5)
+            task = self._save_queue.get(block=True, timeout=10)
             self.update_number_dict(TPEnum.ITEM_SAVE_NOT, -1)
             return task
         self.update_number_dict(TPEnum.TASKS_RUNNING, +1)
