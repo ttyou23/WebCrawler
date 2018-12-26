@@ -4,6 +4,8 @@
 # @Site    : 
 # @File    : thread_fetch.py
 # @Software: PyCharm
+import logging
+import time
 
 from thread_base import BaseThread, TPEnum
 
@@ -17,17 +19,20 @@ class FetchThread(BaseThread):
         """
         procedure of each thread, return True to continue, False to stop
         """
-        url, callback, repeat = self._pool.get_a_task(TPEnum.URL_FETCH)
+        counter, url, callback, repeat = self._pool.get_a_task(TPEnum.URL_FETCH)
 
         state, result = self._worker.fetching(url, repeat)
 
         if state > 0:
-            self._pool.add_a_task(TPEnum.HTM_PARSE, (url, callback, result))
+            self._pool.add_a_task(TPEnum.HTM_PARSE, (counter, url, callback, result))
             self._pool.update_number_dict(TPEnum.URL_FETCH_SUCC, +1)
         elif state == 0:
-            self._pool.add_a_task(TPEnum.URL_FETCH, (callback, url, repeat + 1))
+            self._pool.add_a_task(TPEnum.URL_FETCH, (counter, callback, url, repeat + 1))
         else:
             self._pool.update_number_dict(TPEnum.URL_FETCH_FAIL, +1)
+
+        # ----4----
+        self._pool.finish_a_task(TPEnum.URL_FETCH)
 
         # ----*----
         while (self._pool.get_number_dict(TPEnum.HTM_PARSE_NOT) >= self._max_count) or (self._pool.get_number_dict(TPEnum.ITEM_SAVE_NOT) >= self._max_count):

@@ -9,4 +9,5 @@ from .thread_base import TPEnum, BaseThread
 from .thread_fetch import FetchThread
 from .thread_parse import ParseThread
 from .thread_save import SaveThread
+from .thread_proxies import ProxiesThread
 from .thread_moniter import MoniterThread
