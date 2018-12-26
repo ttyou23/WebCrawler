@@ -28,22 +28,24 @@ class Fetcher(object):
         self._sleep_time = sleep_time
         return
 
-    def fetching(self, url, repeat):
+    def fetching(self, url, repeat, proxies=None):
 
         time.sleep(random.randint(0, self._sleep_time))
         try:
-            fetch_state, fetch_result = self.url_fetch(url)
+            fetch_state, fetch_result = self.url_fetch(url, proxies)
         except Exception as excep:
             if repeat >= self._max_repeat:
                 fetch_state, fetch_result = -1, None
+                logging.error("%s error: %s", self.__class__.__name__, excep)
             else:
                 fetch_state, fetch_result = 0, None
+                logging.debug("%s repeat: %s", self.__class__.__name__, excep)
 
         logging.debug("%s end: fetch_state=%s, url=%s", self.__class__.__name__, fetch_state, url)
         return fetch_state, fetch_result
 
-    def url_fetch(self, url):
-        response = requests.get(url, params=None,  headers={'Connection':'close'}, data=None, timeout=(3.05, 10))
+    def url_fetch(self, url, proxies=None):
+        response = requests.get(url, params=None,  headers={'Connection':'close'}, data=None, proxies=proxies, timeout=(3.05, 10))
         response.encoding = "utf-8"
         result = (response.status_code, response.url, response.text)
         return 1, result

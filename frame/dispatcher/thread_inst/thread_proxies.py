@@ -24,10 +24,12 @@ class ProxiesThread(BaseThread):
         procedure of proxies, auto running, and return False if you need stop thread
         """
         # ----2----
-        proxies_state, proxies_list = self._worker.working()
+        proxies_state, proxies = self._worker.working()
 
-        # ----3----
-        for proxies in proxies_list:
+        # # ----3----
+        # for proxies in proxies_list:
+        #     self._pool.add_a_task(TPEnum.PROXIES, proxies)
+        if proxies_state > 0 and proxies:
             self._pool.add_a_task(TPEnum.PROXIES, proxies)
 
         # ----*----

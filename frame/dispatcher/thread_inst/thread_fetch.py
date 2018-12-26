@@ -14,11 +14,23 @@ class FetchThread(BaseThread):
     """
     class of BaseThread, as base class of each thread
     """
+    def __init__(self, name, worker, pool, max_count=100):
+        """
+        constructor
+        """
+        BaseThread.__init__(self, name, worker, pool)
+        self._max_count = max_count
+        self._proxies = None
+        return
 
     def working(self):
         """
         procedure of each thread, return True to continue, False to stop
         """
+        # ----*----
+        if self._pool.get_proxies_flag() and (not self._proxies):
+            self._proxies = self._pool.get_a_task(TPEnum.PROXIES)
+
         counter, url, callback, repeat = self._pool.get_a_task(TPEnum.URL_FETCH)
 
         state, result = self._worker.fetching(url, repeat)

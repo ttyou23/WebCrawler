@@ -7,13 +7,15 @@ inst_proxies.py by xianhu
 import time
 import logging
 
+import requests
+
 
 class Proxieser(object):
     """
     class of Proxieser, must include function working()
     """
 
-    def __init__(self, sleep_time=10):
+    def __init__(self, sleep_time=1):
         """
         constructor
         :param sleep_time: default 10, sleeping time after a fetching
@@ -29,18 +31,16 @@ class Proxieser(object):
         """
         logging.debug("%s start", self.__class__.__name__)
 
-        time.sleep(self._sleep_time)
+        # time.sleep(self._sleep_time)
         try:
-            proxies_state, proxies_list = self.proxies_get()
+            proxies_state, proxy = self.proxies_get()
         except Exception as excep:
-            proxies_state, proxies_list = -1, []
+            proxies_state, proxy = -1, None
             logging.error("%s error: %s", self.__class__.__name__, excep)
 
-        logging.debug("%s end: proxies_state=%s, len(proxies_list)=%s", self.__class__.__name__, proxies_state, len(proxies_list))
-        return proxies_state, proxies_list
+        logging.debug("%s end: proxies_state=%s, proxies=%s", self.__class__.__name__, proxies_state, proxy)
+        return proxies_state, proxy
 
     def proxies_get(self):
-        """
-        get proxies from web or database, you can rewrite this function, parameters and returns refer to self.working()
-        """
-        raise NotImplementedError
+        proxy = requests.get("http://123.207.35.36:5010/get/").content
+        return 1, {"http": "http://{}".format(proxy)}

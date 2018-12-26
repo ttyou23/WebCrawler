@@ -2,6 +2,7 @@
 
 import logging
 import re
+import time
 
 import requests
 import xlwt
@@ -86,6 +87,7 @@ def delete_proxy(proxy):
 
 if __name__ == '__main__':
     print "====================================开始=========================================="
+
     # logger = logging.getLogger()  # initialize logging class
     # logger.setLevel(logging.DEBUG)  # default log level
     #
