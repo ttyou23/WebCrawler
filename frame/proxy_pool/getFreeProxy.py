@@ -257,7 +257,7 @@ class GetFreeProxy(object):
             if len(tr_list) == 0:
                 continue
             for tr in tr_list:
-                yield tr.xpath("./td[2]/text()")[0] + ":" + tr.xpath("./td[3]/text()")[0], tr.xpath("./td[4]/text()")[0], tr.xpath("./td[5]/text()")[0], tr.xpath("./td[6]/text()")[0]
+                yield tr.xpath("./td[2]/text()")[0] + ":" + tr.xpath("./td[3]/text()")[0]
 
     @staticmethod
     def freeProxyWallFirst():
@@ -300,7 +300,7 @@ class GetFreeProxy(object):
 
 
 if __name__ == '__main__':
-    # from CheckProxy import CheckProxy
+    from CheckProxy import CheckProxy
 
     # CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyFirst)
     # CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxySecond)
@@ -313,8 +313,6 @@ if __name__ == '__main__':
     # CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyNinth)
     # CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyTen)
     # CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyEleven)
-
-    for proxy, type, http, local in GetFreeProxy.freeProxyTwelve():
-        print proxy, type, http, local
+    CheckProxy.checkGetProxyFunc(GetFreeProxy.freeProxyTwelve)
 
     # CheckProxy.checkAllGetProxyFunc()

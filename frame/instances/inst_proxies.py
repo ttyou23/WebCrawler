@@ -45,3 +45,46 @@ class Proxieser(object):
         proxy = requests.get("http://123.207.35.36:5010/get/").content
         return 1, {"http": "http://{}".format(proxy)}
 
+
+def validUsefulProxy(proxy):
+    """
+    检验代理是否可用
+    :param proxy:
+    :return:
+    """
+    if isinstance(proxy, bytes):
+        proxy = proxy.decode('utf8')
+    proxies = {"http": "http://{proxy}".format(proxy=proxy)}
+    try:
+        # 超过20秒的代理就不要了
+        r = requests.get("http://httpbin.org/ip", proxies=proxies, timeout=10, verify=False)
+        print
+        if r.status_code == 200 and r.json().get("origin"):
+            # logger.info('%s is ok' % proxy)
+            return True
+    except Exception as e:
+        print e
+        # logger.error(e)
+    return False
+
+
+if __name__ == '__main__':
+    print "====================================开始=========================================="
+    logger = logging.getLogger()  # initialize logging class
+    logger.setLevel(logging.DEBUG)  # default log level
+
+    # for i in range(1):
+    #     time.sleep(1)
+    #     proxy_list = requests.get("http://192.168.59.130:8080/get_all/").content.split("\"")
+    #     for proxy in proxy_list:
+    #         if len(proxy) > 10:
+    #             print proxy
+    #     # print validUsefulProxy(proxy)
+
+    proxy = "121.69.37.6:9797"
+    # proxy = "43.249.226.65:53281"
+    print validUsefulProxy(proxy)
+
+    print "====================================结束=========================================="
+    exit()
+
