@@ -44,3 +44,4 @@ class Proxieser(object):
     def proxies_get(self):
         proxy = requests.get("http://123.207.35.36:5010/get/").content
         return 1, {"http": "http://{}".format(proxy)}
+
