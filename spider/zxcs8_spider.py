@@ -11,7 +11,7 @@ ZXCS8_POST = "http://www.zxcs.me/post"
 ZXCS8_DOWNLOAD = "http://www.zxcs.me/download.php"
 
 ZXCS8_RECORD_UP = "http://www.zxcs.me/record/201902"
-ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201810"
+ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201812"
 
 post_find_url_list = []
 record_find_url_list = []
