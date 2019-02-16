@@ -81,8 +81,8 @@ if __name__ == '__main__':
     #             print proxy
     #     # print validUsefulProxy(proxy)
 
-    proxy = "121.69.37.6:9797"
-    # proxy = "43.249.226.65:53281"
+    # proxy = "121.69.37.6:9797"
+    proxy = "43.249.226.65:53281"
     print validUsefulProxy(proxy)
 
     print "====================================结束=========================================="
