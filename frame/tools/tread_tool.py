@@ -1,12 +1,10 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2018/5/14 18:50
+# @Time    : 2019/2/17 16:46
 # @Author  : tianwei
-# @Site    :
-# @File    : thread_pool.py
+# @Site    : 
+# @File    : tread_tool.py
 # @Software: PyCharm
 
-# 创建队列实例， 用于存储任务
 import sys
 import threading
 import time
@@ -15,9 +13,6 @@ from threading import Thread
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-class ThreadInterface(object):
-    def handle_job(self, agrs):
-        print "handle job"
 
 class ThreadPoolManger():
     """线程池管理器"""
@@ -36,9 +31,9 @@ class ThreadPoolManger():
             thread = ThreadManger(self.work_queue, self.http_request_lock, self.write_file_lock)
             thread.start()
 
-    def add_job(self, func, ori_url, file):
+    def add_job(self, func, param):
         # 将任务放入队列，等待线程池阻塞读取，参数是被执行的函数和函数的参数
-        self.work_queue.put((func, ori_url, file))
+        self.work_queue.put((func, param))
 
 
 class ThreadManger(Thread):
@@ -54,20 +49,6 @@ class ThreadManger(Thread):
     def run(self):
         # 启动线程
         while True:
-            target, ori_url, file = self.work_queue.get()
-            print "target(ori_url, file): " + str(ori_url) + file
-            target(ori_url, file)
+            func, param = self.work_queue.get()
+            func(param)
             self.work_queue.task_done()
-
-def handle_request(ori_url, file):
-    time.sleep(3)
-    print "handle_request: " + str(ori_url) + file
-
-if __name__=='__main__':
-    thread_pool = ThreadPoolManger(4)
-    for i in range(10):
-        print i
-        thread_pool.add_job(handle_request,  str(i) + "one", str(i) + "two")
-    print " thread_pool.work_queue.join(): "
-    thread_pool.work_queue.join()
-    print "============================= END =============================: "
