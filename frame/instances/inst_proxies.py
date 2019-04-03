@@ -81,9 +81,20 @@ if __name__ == '__main__':
     #             print proxy
     #     # print validUsefulProxy(proxy)
 
-    proxy = "121.69.37.6:9797"
-    # proxy = "43.249.226.65:53281"
-    print validUsefulProxy(proxy)
+    # proxy = "121.69.37.6:9797"
+    # # proxy = "43.249.226.65:53281"
+    # print validUsefulProxy(proxy)
+
+    try:
+        # 超过20秒的代理就不要了
+        proxies = {"http": "http://110.39.174.58:8080"}
+        r = requests.get("http://dd.ma/iinW3M5C?invite_id=lalalalala", proxies=proxies, timeout=10, verify=False)
+        print r.status_code
+        if r.status_code == 200 and r.json().get("origin"):
+            print r.status_code
+            # logger.info('%s is ok' % proxy)
+    except Exception as e:
+        print e
 
     print "====================================结束=========================================="
     exit()

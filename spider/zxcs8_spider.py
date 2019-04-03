@@ -10,13 +10,15 @@ ZXCS8_RECORD = "http://www.zxcs.me/record/"
 ZXCS8_POST = "http://www.zxcs.me/post"
 ZXCS8_DOWNLOAD = "http://www.zxcs.me/download.php"
 
-ZXCS8_RECORD_UP = "http://www.zxcs.me/record/201902"
-ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201812"
+ZXCS8_RECORD_UP = "http://www.zxcs.me/record/201904"
+ZXCS8_RECORD_DOWN = "http://www.zxcs.me/record/201801"
 
 post_find_url_list = []
 record_find_url_list = []
 
 OUTFILE = "D:\\book\\zxcs8 20181213.txt"
+OUTFILE = "D:\\book\\zxcs8 20190212.txt"
+OUTFILE = "D:\\book\\zxcs8 20190328.txt"
 
 
 def get_zxcs8_rar_book(ori_url):
@@ -74,9 +76,18 @@ def get_zxcs8_record(ori_url):
                     record_find_url_list.append(url)
                     get_zxcs8_post(url)
 
+def get_zxcs8_content(ori_url):
+    link_list = tools.get_html_url(ori_url, "div", "id", "content")
+    if link_list is None: return
+    for url in link_list:
+        url_string = str(url)
+        if url_string is None: continue
+        get_zxcs8_download(url)
+        print url
+
 
 if __name__ == '__main__':
     print "====================================begin============================================== "
-    get_zxcs8_record(ZXCS8)
+    get_zxcs8_content(ZXCS8)
 
     print "====================================finish============================================== "

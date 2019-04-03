@@ -22,6 +22,11 @@ def write_file(data, filepath=u"d://file.txt"):
         f.write(data)
 
 
+def read_file(data, filepath=u"d://file.txt"):
+    with open(filepath, 'a+') as f:
+        f.write(data)
+
+
 def write_error(error, filepath=u"d://error.txt"):
     with open(filepath, 'a+') as f:
         f.write(error)
