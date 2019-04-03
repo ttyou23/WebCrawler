@@ -82,6 +82,7 @@ if __name__ == '__main__':
     #     # print validUsefulProxy(proxy)
 
     # proxy = "121.69.37.6:9797"
+
     # # proxy = "43.249.226.65:53281"
     # print validUsefulProxy(proxy)
 
@@ -95,6 +96,10 @@ if __name__ == '__main__':
             # logger.info('%s is ok' % proxy)
     except Exception as e:
         print e
+
+    # proxy = "43.249.226.65:53281"
+    # print validUsefulProxy(proxy)
+
 
     print "====================================结束=========================================="
     exit()
