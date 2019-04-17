@@ -72,6 +72,7 @@ def get_html_url(ori_url):
         # print "get_html_url: " + ori_url + "   -->ok"
         return link_list
 
+
 def get_zadzs_txt_book(ori_url):
 
     link_list = get_html_url(ori_url)
@@ -85,6 +86,7 @@ def get_zadzs_txt_book(ori_url):
             print book_url
             write_book_url_file(book_url + "\n")
             return
+
 
 def get_zadzs_list(ori_url, dis_url):
     link_list = get_html_book_data(dis_url)
@@ -101,6 +103,7 @@ def get_zadzs_list(ori_url, dis_url):
                 record_find_url_list.append(url)
                 subUrl = ori_url + url
                 get_zadzs_list(ori_url, subUrl)
+
 
 if __name__=='__main__':
     print "====================================begin============================================== "
