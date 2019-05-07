@@ -8,9 +8,11 @@ sys.setdefaultencoding("utf8")
 PV190_ROOTURL = "http://bbs.my8600.com"
 
 OUT_DIR = "D:\\book\\pv190\\"
-PV190_FILE = "_20190331_img.txt"
-PV190_TORRENT = "_20190331_torrent.txt"
-FLAG_FILE = "_20190331_flag.txt"
+
+CURRENT_DATE = "20190507"
+PV190_FILE = "_%s_img.txt" % CURRENT_DATE
+PV190_TORRENT = "_%s_torrent.txt" % CURRENT_DATE
+FLAG_FILE = "_%s_flag.txt" % CURRENT_DATE
 FLAG = "\0"
 HTTP_SPLIT = "http://"
 
@@ -113,5 +115,7 @@ if __name__ == '__main__':
     # param_json["dir"] = "2222"
     # param_json["file"] = "33333"
     # get_pagecon(param_json)
+
+    print PV190_FILE, PV190_TORRENT, FLAG_FILE
 
     print "====================================finish============================================== "
