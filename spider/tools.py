@@ -12,6 +12,7 @@ import re
 from bs4 import BeautifulSoup
 import requests
 import xlwt as xlwt
+from pyquery import PyQuery
 
 reload(sys)
 sys.setdefaultencoding("utf8")
@@ -108,3 +109,26 @@ def get_html_url(ori_url, tag, key, flag, index=0):
     else:
         print "get_html_url: " + ori_url + "   -->ok"
     return link_list
+
+
+def get_html_content(ori_url, selector):
+    """
+    获取网页标签中的内容
+    :param ori_url:网址
+    :param selector:内容过滤器
+    :return:
+    """
+    try:
+        # 获取网页内容
+        s = requests.session()
+        s.keep_alive = False
+        response = requests.get(ori_url, headers={'Connection':'close'})
+        response.encoding = "utf-8"
+        data = response.text
+        response.close()
+
+        return PyQuery(data).find(selector)
+    except Exception, err:
+        print 2, err
+        write_error(ori_url + "\0" + str(err) + "\n")
+    return ""

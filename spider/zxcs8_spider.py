@@ -19,7 +19,7 @@ record_find_url_list = []
 OUTFILE = "D:\\book\\zxcs8 20181213.txt"
 OUTFILE = "D:\\book\\zxcs8 20190212.txt"
 OUTFILE = "D:\\book\\zxcs8 20190328.txt"
-OUTFILE = "D:\\book\\zxcs8 20190508.txt"
+OUTFILE = "D:\\book\\zxcs8 20190513.txt"
 
 
 def get_zxcs8_rar_book(ori_url):
