@@ -10,11 +10,10 @@ ROOT_URL = "http://www.zxcs.me/map.html"
 
 def zxcs_get_all():
 
+    # content = tools.get_html_content(ROOT_URL, "body .wrap #sort ul li a:contains('(')")
     content = tools.get_html_content(ROOT_URL, "body .wrap #sort ul li a:contains('(')")
-    print content, content.length
-    # content.
-    for a in content:
-        print a.text()
+    for a in content.items():
+        print a.attr.href
 
 
 if __name__ == '__main__':
