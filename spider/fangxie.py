@@ -3,7 +3,7 @@
 # @Time    : 2018/12/12 16:30
 # @Author  : tianwei
 # @Site    : 爬取成都房协网发布信息
-# @File    : cdfangxie_spider.py
+# @File    : fangxie.py
 # @Software: PyCharm
 import os
 import sys
@@ -114,3 +114,4 @@ if __name__=='__main__':
     print "====================================begin============================================== "
     get_fangxie_tab(CDFANGXIE)
     print "====================================finish============================================== "
+    exit(0)

@@ -3,20 +3,20 @@
 # @Time    : 2018/12/13 19:19
 # @Author  : tianwei
 # @Site    : 工具文件
-# @File    : htm_tools.py
+# @File    : tools.py
 # @Software: PyCharm
 
 import os
 import sys
-import re
-from bs4 import BeautifulSoup
 import requests
+import urllib2
 import xlwt as xlwt
 from pyquery import PyQuery
 
 reload(sys)
 sys.setdefaultencoding("utf8")
 
+HEADERS = {"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36"}
 
 def write_file(data, filepath=u"d://file.txt"):
     with open(filepath, 'a+') as f:
@@ -49,86 +49,59 @@ def save2excel(houses, filepath):
     print os.getcwd()
 
 
-def get_html_content(ori_url, tag, key, flag):
-    """
-    获取网页标签中的内容
-    :param ori_url:网址
-    :param tag:标签
-    :param key:
-    :param flag:
-    :return: 标签内容列表
-    """
-    try:
-        # 获取网页内容
-        s = requests.session()
-        s.keep_alive = False
-        response = requests.get(ori_url, headers={'Connection':'close'})
-        response.encoding = 'utf-8'
-        data = response.text
-        response.close();
-
-        res_set = BeautifulSoup(data, "html.parser").find_all(tag, attrs={key: flag})
-        return res_set
-    except Exception, err:
-        print 2, err
-        write_error(ori_url + "\0" + str(err) + "\n")
-    else:
-        print "get_html_conten: " + ori_url + "   -->ok"
-    return ""
-
-
-def get_html_url(ori_url, tag, key, flag, index=0):
-    """
-    获取网页指定标签中所有链接
-    :param ori_url:网址
-    :param tag:标签名
-    :param key:
-    :param flag:
-    :param index:
-    :return: 所有链接列表
-    """
-    link_list = []
-    try:
-        # 获取网页内容
-        s = requests.session()
-        s.keep_alive = False
-        response = requests.get(ori_url, headers={'Connection':'close'})
-        response.encoding = 'utf-8'
-        data = response.text
-        response.close();
-
-        # 利用正则查找所有连接
-        res_set = BeautifulSoup(data, "html.parser").find_all(tag, attrs={key: flag})
-        if res_set and len(res_set)>0:
-            content = res_set[index]
-        else : content = res_set
-        link_list = re.findall(r"(?<=href=\").+?(?=\")|(?<=href=\').+?(?=\')", str(content))
-    except Exception, err:
-        print 2, err
-        write_error(ori_url + "\0" + str(err) + "\n")
-    else:
-        print "get_html_url: " + ori_url + "   -->ok"
-    return link_list
-
-
 def get_html_content(ori_url, selector):
     """
     获取网页标签中的内容
     :param ori_url:网址
     :param selector:内容过滤器
-    :return:
+    :return: 获取内容
     """
     try:
         # 获取网页内容
         s = requests.session()
         s.keep_alive = False
-        response = requests.get(ori_url, headers={'Connection':'close'})
+        # response = requests.get(ori_url, headers={'Connection': 'close'})
+        response = requests.get(ori_url, headers=HEADERS)
         response.encoding = "utf-8"
         data = response.text
         response.close()
 
         return PyQuery(data).find(selector)
     except Exception, err:
-        print 2, err
+        print "error: ", err
         write_error(ori_url + "\0" + str(err) + "\n")
-    return ""
+    return PyQuery("")
+
+
+def get_html_content_format_headers(ori_url, selector):
+    """
+    获取网页标签中的内容
+    :param ori_url:网址
+    :param selector:内容过滤器
+    :return: 获取内容
+    """
+    try:
+        # 获取网页内容
+        s = requests.session()
+        s.keep_alive = False
+        response = requests.get(ori_url, headers=HEADERS)
+        response.encoding = "utf-8"
+        data = response.text
+        response.close()
+
+        return PyQuery(data).find(selector)
+    except Exception, err:
+        print "error: ", err
+        write_error(ori_url + "\0" + str(err) + "\n")
+    return PyQuery("")
+
+
+def get_query_header(ori_url):
+    # 获取请求头
+    s = requests.session()
+    s.keep_alive = False
+    response = requests.head(ori_url, headers=HEADERS)
+    response.encoding = 'utf-8'
+    data = response.headers
+    response.close();
+    return data

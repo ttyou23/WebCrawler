@@ -146,7 +146,8 @@ def get_zadzs_tag(ori_url):
         subUrl = ZADZS_HOME + url
         if subUrl != ori_url:
             print(subUrl)
-            get_zadzs_list(subUrl, subUrl)
+            # get_zadzs_list(subUrl, subUrl)
+            break
 
 
 if __name__=='__main__':
